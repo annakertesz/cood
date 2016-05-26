@@ -37,19 +37,19 @@ def info_board():
         screen.addstr(i, dims[1] - 14, "|")
 
 
-def is_win():
-    global already_have, snake, quit
-    if already_have == 6:
-        quit = 1
-        return True
-
-
 def is_dead():
     global life, snake, quit
     if life == 0:
         quit = 1
     if snake[0] in snake[1:]:
         quit = 1
+
+
+def is_win():
+    global already_have, snake, quit
+    if already_have == 6:
+        quit = 1
+        return True
 
 
 def appears(dx, dy):  # the snake appears
@@ -65,27 +65,6 @@ def appears(dx, dy):  # the snake appears
         screen.addstr(snake[i][0], snake[i][1], "x", curses.color_pair(3))
     if snake[0] in snake[1:]:
         quit = 1
-
-
-def horcrux():
-    global already_have, hx, hy, horcruxes, dims, snake, score, mylist
-    if score % 3 == 0:
-        # horcruxes[already_have])
-        screen.addstr(hx, hy, horcruxes[already_have + 1][0])
-        if (snake[len(snake) -
-                  1][1] == hy or snake[len(snake) -
-                                       1][1] == hy +
-            1 or snake[len(snake) -
-                       1][1] == hy +
-            2) and snake[len(snake) -
-                         1][0] == hx:  # H_eating
-            score += 1
-            screen.addstr(hx, hy, "    ")
-            hx = randint(2, dims[0] - 2)
-            hy = randint(2, dims[1] - 14)
-            screen.refresh()
-            already_have += 1
-            mylist.append(horcruxes[already_have])
 
 
 def fawkes():
@@ -137,12 +116,33 @@ def mudbloods():
     did_catch = False
     screen.addstr(mb_x, mb_y, "i")
     if (snake[len(snake) - 1][0]
-        ) == mb_x and (snake[len(snake) - 1][1]) == mb_y:
+            ) == mb_x and (snake[len(snake) - 1][1]) == mb_y:
         mb_x = (randint(2, dims[0] - 2))
         mb_y = (randint(2, dims[1] - 14))
         did_catch = True
         score += 1
     return did_catch
+
+
+def horcrux():
+    global already_have, hx, hy, horcruxes, dims, snake, score, mylist
+    if score % 3 == 0:
+        # horcruxes[already_have])
+        screen.addstr(hx, hy, horcruxes[already_have + 1][0])
+        if (snake[len(snake) -
+                  1][1] == hy or snake[len(snake) -
+                                       1][1] == hy +
+            1 or snake[len(snake) -
+                       1][1] == hy +
+            2) and snake[len(snake) -
+                         1][0] == hx:  # H_eating
+            score += 1
+            screen.addstr(hx, hy, "    ")
+            hx = randint(2, dims[0] - 2)
+            hy = randint(2, dims[1] - 14)
+            screen.refresh()
+            already_have += 1
+            mylist.append(horcruxes[already_have])
 
 
 def walls(dims):
@@ -164,8 +164,8 @@ def step():  # one complet step
     appears(dx, dy)
     walls(dims)
     mudbloods()
-    fawkes()
-    is_dead()
     horcrux()
+    fawkes()
     is_win()
+    is_dead()
     time.sleep(1 / score)
