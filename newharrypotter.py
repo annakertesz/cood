@@ -23,6 +23,20 @@ score = 1
 life = 10
 
 
+def info_board():
+    global dims, life, score, quit, mylist
+    if life > 4:
+        screen.addstr(1, dims[1] - 11, "▓" * life, curses.color_pair(3))
+    else:
+        screen.addstr(1, dims[1] - 11, "▓" * life, curses.color_pair(2))
+    screen.addstr(1, dims[1] - (11 - life), "▓" *
+                  (10 - life), curses.color_pair(1))
+    for i in range(0, len(mylist)):
+        screen.addstr(2 + 2 * i, dims[1] - 11, mylist[i][1])
+    for i in range(1, dims[0] - 1):
+        screen.addstr(i, dims[1] - 14, "|")
+
+
 def is_win():
     global already_have, snake, quit
     if already_have == 6:
@@ -145,6 +159,7 @@ def walls(dims):
 
 def step():  # one complet step
     global score
+    info_board()
     press()
     appears(dx, dy)
     walls(dims)
